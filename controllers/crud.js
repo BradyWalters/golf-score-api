@@ -52,8 +52,3 @@ const crudControllers = (model) => ({
 })
 
 exports.crudControllers = crudControllers
-exports.getAll = getAll
-exports.addOne = addOne
-exports.getOne = getOne
-exports.updateOne = updateOne
-exports.removeOne = removeOne

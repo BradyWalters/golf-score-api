@@ -7,7 +7,7 @@ const crudController = require('./crud')
 
 const db = require('../db')
 
-const UserSchema = require('../schemas/user')
+const UserSchema = require('../schemas/user.schema')
 const User = db.model('User', UserSchema)
 
 const addUser = (req, res) => {
