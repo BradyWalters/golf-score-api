@@ -1,8 +1,13 @@
 const { Schema } = require("mongoose")
 const emailVal = require("email-validator")
+const mongoose = require('mongoose')
 
 const user = new Schema({
-    name: String,
+    name: {
+        type: String,
+        trim: true,
+        maxlength: 50
+    },
     email: {
         type: String,
         required: true,
@@ -17,7 +22,7 @@ const user = new Schema({
     password: {
         type: String,
         required: true,
-    }
+    },
 })
 
 module.exports = user

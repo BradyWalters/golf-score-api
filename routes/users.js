@@ -21,12 +21,12 @@ const deleteUser = (req, res) => {
 }
 
 router.route('/')
-    .get(getAllUsers)
+    .get(userController.crudControllers.getAll)
     .post(userController.addUser)
 
 router.route('/:id')
-    .get(getUser)
-    .put(changeUser)
-    .delete(deleteUser)
+    .get(userController.crudControllers.getOne)
+    .put(userController.crudControllers.updateOne)
+    .delete(userController.crudControllers.removeOne)
 
 module.exports = router

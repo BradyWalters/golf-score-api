@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const saltRounds = parseInt(process.env.SALT_ROUNDS)
 require('dotenv').config()
 
+const crudController = require('./crud')
+
 const db = require('../db')
 
 const UserSchema = require('../schemas/user')
@@ -19,10 +21,9 @@ const addUser = (req, res) => {
 
                 newUser.save((err) => {
                     if (err) {
-                        console.error(err)
+                        res.status(404).end()
                     } else {
-                        console.log(`success!`)
-                        res.status(200).send()
+                        res.status(201).json({ data: newUser})
                     }
                 })
             }
@@ -30,19 +31,19 @@ const addUser = (req, res) => {
     })
 }
 
-const login = (email, password) => {
-    User.findOne({ "email": email }, (err, user) => {
+const login = (req, res) => {
+    User.findOne({ "email": req.body.email }, (err, user) => {
         if(err) {
             console.error(err)
         } else {
-            bcrypt.compare(password, user.password, (err, result) => {
+            bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if(err) {
                     console.error(err)
                 } else {
                     if(result) {
-                        console.log(`user ${user.email} successful login!`)
+                        res.status(202).json({ data: user })
                     } else {
-                        console.log(`wrong password!`)
+                        res.status(401).end()
                     }
                 }
             })
@@ -52,3 +53,4 @@ const login = (email, password) => {
 
 exports.addUser = addUser
 exports.login = login
+exports.crudControllers = crudController.crudControllers(User)
