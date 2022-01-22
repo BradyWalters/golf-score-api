@@ -11,17 +11,20 @@ app.listen(3000, () => {
     console.log(`user test server started`)
 })
 
-beforeEach(async(done) => {
-    await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}${process.env.DB_URL}`, () => done())
+beforeAll(() => {
+    return mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}${process.env.DB_URL}`)
 })
 
-afterEach(async (done) => {
-    await mongoose.connection.dropDatabase()
-    await mongoose.connection.close()
+afterEach(() => {
+    return mongoose.connection.dropDatabase()
 })
 
-test('add user with name and proper email', async () => {
-    await supertest(app).post('/users')
+afterAll(() => {
+    return mongoose.connection.close()
+})
+
+test('add user with name and proper email', () => {
+    return supertest(app).post('/users')
         .send(goodUser)
         .expect(201)
 })
