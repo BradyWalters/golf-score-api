@@ -1,4 +1,5 @@
-const port = 3000
+require('dotenv').config()
+const port = process.env.PORT
 
 var createError = require('http-errors');
 var express = require('express');
@@ -44,6 +45,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(port, () => {
-  console.log(`now listening on port ${port}`);
-})
+module.exports = app
