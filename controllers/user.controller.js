@@ -10,8 +10,8 @@ const db = require('../db')
 const UserSchema = require('../schemas/user.schema')
 const User = db.model('User', UserSchema)
 
-const addUser = async (req, res) => {
-    await bcrypt.genSalt(saltRounds, (err, salt) => {
+const addUser = (req, res) => {
+    bcrypt.genSalt(saltRounds, (err, salt) => {
         bcrypt.hash(req.body.password, salt, (err, hash) => {
             if (err) {
                 console.error(err)
@@ -31,8 +31,8 @@ const addUser = async (req, res) => {
     })
 }
 
-const login = async (req, res) => {
-    await User.findOne({ "email": req.body.email }, (err, user) => {
+const login = (req, res) => {
+    User.findOne({ "email": req.body.email }, (err, user) => {
         if(err) {
             console.error(err)
         } else {
