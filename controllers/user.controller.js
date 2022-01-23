@@ -10,8 +10,8 @@ const db = require('../db')
 const UserSchema = require('../schemas/user.schema')
 const User = db.model('User', UserSchema)
 
-const addUser = (req, res) => {
-    bcrypt.genSalt(saltRounds, (err, salt) => {
+const addUser = async (req, res) => {
+    await bcrypt.genSalt(saltRounds, (err, salt) => {
         bcrypt.hash(req.body.password, salt, (err, hash) => {
             if (err) {
                 console.error(err)
@@ -20,27 +20,23 @@ const addUser = (req, res) => {
                 const newUser = new User(req.body)
 
                 newUser.save((err) => {
-                    if (err) {
-                        res.status(404).end()
-                    } else {
-                        res.status(201).json({ data: newUser})
-                    }
+                    res.status(201).json({ data: newUser })
                 })
             }
         })
     })
 }
 
-const login = (req, res) => {
-    User.findOne({ "email": req.body.email }, (err, user) => {
-        if(err) {
+const login = async (req, res) => {
+    await User.findOne({ "email": req.body.email }, (err, user) => {
+        if (err) {
             console.error(err)
         } else {
             bcrypt.compare(req.body.password, user.password, (err, result) => {
-                if(err) {
+                if (err) {
                     console.error(err)
                 } else {
-                    if(result) {
+                    if (result) {
                         res.status(202).json({ data: user })
                     } else {
                         res.status(401).end()
