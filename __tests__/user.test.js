@@ -13,13 +13,13 @@ afterEach(() => {
     })
 })
 
-test('add user with name and proper email', () => {
-    return supertest(app).post('/users')
+test('add user with name and proper email', async () => {
+    return await supertest(app).post('/users')
         .send(goodUser)
         .expect(201)
 })
 
 test('get users when none exist', () => {
     return supertest(app).get('/users')
-        .expect(404)
+        .expect(200)
 })
