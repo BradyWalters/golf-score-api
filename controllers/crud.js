@@ -13,11 +13,10 @@ const getOne = model => async (req, res) => {
         } else {
             res.status(200).json({ data: result })
         }
-    })
+    }).clone()
 }
 
 const addOne = model => async (req, res) => {
-    console.log(req.user._id)
     const newOne = await model.create(req.body)
     res.status(201).json({ data: newOne })
 }
@@ -29,7 +28,7 @@ const updateOne = model => async (req, res) => {
         } else {
             res.status(200).json({ data: result })
         }
-    })
+    }).clone()
 }
 
 const removeOne = model => async (req, res) => {
@@ -39,7 +38,7 @@ const removeOne = model => async (req, res) => {
         } else {
             res.status(200).json({ data: result })
         }
-    })
+    }).clone()
 }
 
 const crudControllers = (model) => ({

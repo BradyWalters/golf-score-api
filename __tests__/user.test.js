@@ -1,12 +1,11 @@
 const app = require('../app')
 const supertest = require('supertest')
-const userController = require('../controllers/user.controller')
 const db = require('../db')
-const userSchema = require('../schemas/user.schema')
-const { isAssertClause } = require('typescript')
-const User = db.model('User', userSchema)
 
-afterEach(() => {
+let userId
+const fakeId = new db.Types.ObjectId()
+
+beforeAll(() => {
     return db.connection.dropDatabase()
 })
 
@@ -14,7 +13,16 @@ afterAll(() => {
     return db.connection.close()
 })
 
-test('add user with name and proper email', async () => {
+test('GET users with no users', async () => {
+    return await supertest(app).get('/users')
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .then((res) => {
+            if(res.body.data[0]) throw new Error('Returned users when none exist')
+        })
+})
+
+test('POST new user', async () => {
     return await supertest(app).post('/users')
         .send({
             "email": "brady.walters5@gmail.com",
@@ -26,35 +34,64 @@ test('add user with name and proper email', async () => {
         .then((res) => {
             if(res.body.data.email !== "brady.walters5@gmail.com") throw new Error("Wrong Email")
             if(res.body.data.name !== "Brady") throw new Error("Wrong Name")
+
+            userId = res.body.data._id
         })
 })
 
-test('get users when none exist', async () => {
+test('GET users with one user', async () => {
     return await supertest(app).get('/users')
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
-            if(res.body.data[0]) throw new Error("Returned something when nothing exists")
+            if(!res.body.data[0]) throw new Error('Returned no users when one exists')
         })
 })
 
-// test('get all users when one exists', async () => {
-//     const oneUser = new User({
-//         "email": "brady.walters5@gmail.com",
-//         "password": "password",
-//         "name": "Brady"
-//     })
+test('GET /:id correct ID', async() => {
+    return await supertest(app).get(`/users/${userId}`)
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .then((res) => {
+            if(res.body.data.email !== "brady.walters5@gmail.com") throw new Error("Wrong Email")
+            if(res.body.data.name !== "Brady") throw new Error("Wrong Name")
+        })
+})
 
-//     oneUser.save((err) => {
-//         throw err
-//     })
+test('GET /:id wrong ID', async() => {
+    return await supertest(app).get(`/users/${fakeId}`).expect(404)
+})
 
-//     return await supertest(app).get('/users')
-//         .expect("Content-Type", /json/)
-//         .expect(200)
-//         .then((res) => {
-//             console.log(res.body)
-//             if(res.body.data.email !== "brady.walters5@gmail.com") throw new Error("Wrong Email")
-//             if(res.body.data.name !== "Brady") throw new Error("Wrong Name")
-//         })
-// })
+test('PUT /:id change email', async() => {
+    return await supertest(app).put(`/users/${userId}`)
+        .send({
+            "email": "example@gmail.com",
+        })
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .then((res) => {
+            if(res.body.data.email !== "example@gmail.com") throw new Error("Wrong email")
+        })
+})
+
+test('PUT /:id wrong id', async() => {
+    return await supertest(app).put(`/users/${fakeId}`)
+        .send({
+            "email": "example@gmail.com",
+        })
+        .expect(400)
+})
+
+test('DEL /:id correct id', async() => {
+    return await supertest(app).delete(`/users/${userId}`)
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .then((res) => {
+            if(res.body.data.email !== "example@gmail.com") throw new Error('Wrong email')
+        })
+})
+
+test('DEL /:id wrong id', async() => {
+    return await supertest(app).delete(`/users/${userId}`)
+        .expect(400)
+})
