@@ -2,7 +2,7 @@ const app = require('../app')
 const supertest = require('supertest')
 const db = require('../db')
 
-let coursId
+let courseId
 const fakeId = db.Types.ObjectId()
 
 beforeAll(() => {
@@ -18,7 +18,7 @@ test('GET all courses with no courses', async () => {
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
-            if(res.body.data[0]) throw new Error('Returned users when none exist')
+            if(res.body.data[0]) throw new Error('Returned courses when none exist')
         })
 })
 
