@@ -3,6 +3,7 @@ const supertest = require('supertest')
 const db = require('../db')
 
 let userId
+let userToken
 const fakeId = new db.Types.ObjectId()
 
 beforeAll(() => {
@@ -14,7 +15,7 @@ afterAll(() => {
 })
 
 test('GET users with no users', async () => {
-    return await supertest(app).get('/users')
+    return await supertest(app).get('/api/users')
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -23,7 +24,7 @@ test('GET users with no users', async () => {
 })
 
 test('POST new user', async () => {
-    return await supertest(app).post('/users')
+    return await supertest(app).post('/signup')
         .send({
             "email": "brady.walters5@gmail.com",
             "password": "password",
@@ -34,13 +35,13 @@ test('POST new user', async () => {
         .then((res) => {
             if(res.body.data.email !== "brady.walters5@gmail.com") throw new Error("Wrong Email")
             if(res.body.data.name !== "Brady") throw new Error("Wrong Name")
-
+            
             userId = res.body.data._id
         })
 })
 
 test('GET users with one user', async () => {
-    return await supertest(app).get('/users')
+    return await supertest(app).get('/api/users')
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -49,7 +50,7 @@ test('GET users with one user', async () => {
 })
 
 test('GET /:id correct ID', async() => {
-    return await supertest(app).get(`/users/${userId}`)
+    return await supertest(app).get(`/api/users/${userId}`)
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -59,11 +60,11 @@ test('GET /:id correct ID', async() => {
 })
 
 test('GET /:id wrong ID', async() => {
-    return await supertest(app).get(`/users/${fakeId}`).expect(404)
+    return await supertest(app).get(`/api/users/${fakeId}`).expect(404)
 })
 
 test('PUT /:id change email', async() => {
-    return await supertest(app).put(`/users/${userId}`)
+    return await supertest(app).put(`/api/users/${userId}`)
         .send({
             "email": "example@gmail.com",
         })
@@ -75,7 +76,7 @@ test('PUT /:id change email', async() => {
 })
 
 test('PUT /:id wrong id', async() => {
-    return await supertest(app).put(`/users/${fakeId}`)
+    return await supertest(app).put(`/api/users/${fakeId}`)
         .send({
             "email": "example@gmail.com",
         })
@@ -83,7 +84,7 @@ test('PUT /:id wrong id', async() => {
 })
 
 test('DEL /:id correct id', async() => {
-    return await supertest(app).delete(`/users/${userId}`)
+    return await supertest(app).delete(`/api/users/${userId}`)
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -92,6 +93,6 @@ test('DEL /:id correct id', async() => {
 })
 
 test('DEL /:id wrong id', async() => {
-    return await supertest(app).delete(`/users/${userId}`)
+    return await supertest(app).delete(`/api/users/${userId}`)
         .expect(400)
 })

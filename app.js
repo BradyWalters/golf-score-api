@@ -1,32 +1,38 @@
 require('dotenv').config()
 
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var createError = require('http-errors')
+var express = require('express')
+var path = require('path')
+var cookieParser = require('cookie-parser')
+var logger = require('morgan')
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users.route');
+const userController = require('./controllers/user.controller')
+const auth = require('./middleware/auth')
+
+const indexRouter = require('./routes/index')
+const usersRouter = require('./routes/users.route')
 const coursesRouter = require('./routes/courses.route')
 const scoresRouter = require('./routes/scores.route')
 
-var app = express();
+var app = express()
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'jade')
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(logger('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/courses', coursesRouter)
-app.use('/scores', scoresRouter)
+app.use('/signup', userController.addUser)
+app.use('/signin', userController.login)
+app.use('/api', auth.authenticateToken)
+app.use('/api/users', usersRouter)
+app.use('/api/courses', coursesRouter)
+app.use('/api/scores', scoresRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

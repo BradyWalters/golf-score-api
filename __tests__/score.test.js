@@ -14,7 +14,7 @@ afterAll(() => {
 })
 
 test('GET all scores with no scores', async () => {
-    return await supertest(app).get('/scores')
+    return await supertest(app).get('/api/scores')
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -23,7 +23,7 @@ test('GET all scores with no scores', async () => {
 })
 
 test('POST new score', async () => {
-    return await supertest(app).post('/scores')
+    return await supertest(app).post('/api/scores')
         .send({
             "user": "61ce13f7bae8a1b1654b20c5",
             "course": "61ce28feea913be25b0fb1a4",
@@ -43,7 +43,7 @@ test('POST new score', async () => {
 })
 
 test('GET all courses with one score', async () => {
-    return await supertest(app).get('/scores')
+    return await supertest(app).get('/api/scores')
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -52,7 +52,7 @@ test('GET all courses with one score', async () => {
 })
 
 test('GET /:id correct ID', async() => {
-    return await supertest(app).get(`/scores/${scoreId}`)
+    return await supertest(app).get(`/api/scores/${scoreId}`)
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -61,11 +61,11 @@ test('GET /:id correct ID', async() => {
 })
 
 test('GET /:id wrong ID', async() => {
-    return await supertest(app).get(`/scores/${fakeId}`).expect(404)
+    return await supertest(app).get(`/api/scores/${fakeId}`).expect(404)
 })
 
 test('PUT /:id update strokes', async() => {
-    return await supertest(app).put(`/scores/${scoreId}`)
+    return await supertest(app).put(`/api/scores/${scoreId}`)
         .send({
             "strokes": 76,
         })
@@ -77,7 +77,7 @@ test('PUT /:id update strokes', async() => {
 })
 
 test('PUT /:id wrong id', async() => {
-    return await supertest(app).put(`/scores/${fakeId}`)
+    return await supertest(app).put(`/api/scores/${fakeId}`)
         .send({
             "duh": "idk",
         })
@@ -85,7 +85,7 @@ test('PUT /:id wrong id', async() => {
 })
 
 test('PUT /:id wrong type', async() => {
-    return await supertest(app).put(`/scores/${fakeId}`)
+    return await supertest(app).put(`/api/scores/${fakeId}`)
         .send({
             "strokes": "77"
         })
@@ -93,7 +93,7 @@ test('PUT /:id wrong type', async() => {
 })
 
 test('DEL /:id correct id', async() => {
-    return await supertest(app).delete(`/scores/${scoreId}`)
+    return await supertest(app).delete(`/api/scores/${scoreId}`)
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -102,6 +102,6 @@ test('DEL /:id correct id', async() => {
 })
 
 test('DEL /:id wrong id', async() => {
-    return await supertest(app).delete(`/scores/${scoreId}`)
+    return await supertest(app).delete(`/api/scores/${scoreId}`)
         .expect(400)
 })

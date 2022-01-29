@@ -1,6 +1,7 @@
 
 const bcrypt = require('bcrypt')
 const saltRounds = parseInt(process.env.SALT_ROUNDS)
+const auth = require('../middleware/auth')
 require('dotenv').config()
 
 const crudController = require('./crud')
@@ -19,8 +20,11 @@ const addUser = async (req, res) => {
                 req.body.password = hash
                 const newUser = new User(req.body)
 
+                const token = auth.genToken(newUser._id)
+
                 newUser.save((err) => {
-                    res.status(201).json({ data: newUser })
+                    delete newUser.password
+                    res.status(201).json({ data: newUser, token: token })
                 })
             }
         })
@@ -37,7 +41,9 @@ const login = async (req, res) => {
                     console.error(err)
                 } else {
                     if (result) {
-                        res.status(202).json({ data: user })
+                        delete user.password
+                        const token = auth.genToken(user._id)
+                        res.status(202).json({ data: user, token: token })
                     } else {
                         res.status(401).end()
                     }

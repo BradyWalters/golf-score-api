@@ -14,7 +14,7 @@ afterAll(() => {
 })
 
 test('GET all courses with no courses', async () => {
-    return await supertest(app).get('/courses')
+    return await supertest(app).get('/api/courses')
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -23,7 +23,7 @@ test('GET all courses with no courses', async () => {
 })
 
 test('POST new course', async () => {
-    return await supertest(app).post('/courses')
+    return await supertest(app).post('/api/courses')
         .send({
             "name": "Warm Springs Golf Course",
 			"holes": 18,
@@ -51,7 +51,7 @@ test('POST new course', async () => {
 })
 
 test('GET all courses with one course', async () => {
-    return await supertest(app).get('/courses')
+    return await supertest(app).get('/api/courses')
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -60,7 +60,7 @@ test('GET all courses with one course', async () => {
 })
 
 test('GET /:id correct ID', async() => {
-    return await supertest(app).get(`/courses/${courseId}`)
+    return await supertest(app).get(`/api/courses/${courseId}`)
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -72,11 +72,11 @@ test('GET /:id correct ID', async() => {
 })
 
 test('GET /:id wrong ID', async() => {
-    return await supertest(app).get(`/courses/${fakeId}`).expect(404)
+    return await supertest(app).get(`/api/courses/${fakeId}`).expect(404)
 })
 
 test('PUT /:id add tee', async() => {
-    return await supertest(app).put(`/courses/${courseId}`)
+    return await supertest(app).put(`/api/courses/${courseId}`)
         .send({
             "tees": [
 				{
@@ -103,7 +103,7 @@ test('PUT /:id add tee', async() => {
 })
 
 test('PUT /:id wrong id', async() => {
-    return await supertest(app).put(`/courses/${fakeId}`)
+    return await supertest(app).put(`/api/courses/${fakeId}`)
         .send({
             "name": "Quail Hollow Golf Course",
         })
@@ -111,7 +111,7 @@ test('PUT /:id wrong id', async() => {
 })
 
 test('DEL /:id correct id', async() => {
-    return await supertest(app).delete(`/courses/${courseId}`)
+    return await supertest(app).delete(`/api/courses/${courseId}`)
         .expect("Content-Type", /json/)
         .expect(200)
         .then((res) => {
@@ -120,6 +120,6 @@ test('DEL /:id correct id', async() => {
 })
 
 test('DEL /:id wrong id', async() => {
-    return await supertest(app).delete(`/courses/${courseId}`)
+    return await supertest(app).delete(`/api/courses/${courseId}`)
         .expect(400)
 })

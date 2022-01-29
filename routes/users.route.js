@@ -4,7 +4,6 @@ const userController = require('../controllers/user.controller')
 
 router.route('/')
     .get(userController.crudControllers.getAll)
-    .post(userController.addUser)
 
 router.route('/:id')
     .get(userController.crudControllers.getOne)
