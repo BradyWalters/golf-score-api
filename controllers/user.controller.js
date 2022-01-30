@@ -20,7 +20,7 @@ const addUser = async (req, res) => {
                 req.body.password = hash
                 const newUser = new User(req.body)
 
-                const token = auth.genToken(newUser._id)
+                const token = auth.genToken({id: newUser._id})
 
                 newUser.save((err) => {
                     delete newUser.password
