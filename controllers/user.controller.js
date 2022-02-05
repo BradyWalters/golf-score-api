@@ -12,6 +12,10 @@ const UserSchema = require('../schemas/user.schema')
 const User = db.model('User', UserSchema)
 
 const addUser = async (req, res) => {
+    if (!req.body.email || !req.body.password) {
+        return res.status(400)
+    }
+
     await bcrypt.genSalt(saltRounds, (err, salt) => {
         bcrypt.hash(req.body.password, salt, (err, hash) => {
             if (err) {
@@ -32,6 +36,10 @@ const addUser = async (req, res) => {
 }
 
 const login = async (req, res) => {
+    if (!req.body.email || !req.body.password) {
+        return res.status(400)
+    }
+    
     await User.findOne({ "email": req.body.email }, (err, user) => {
         if (err) {
             console.error(err)

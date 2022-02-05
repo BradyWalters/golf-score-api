@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon node server.js",
+    "start": "node server.js",
     "run": "DEBUG=golf-api:* npm start",
     "test": "jest"
   },
@@ -18,7 +18,8 @@
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.4",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "vercel": "^23.1.2"
   },
   "devDependencies": {
     "jest": "^27.4.5",
