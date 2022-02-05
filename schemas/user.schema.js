@@ -1,5 +1,6 @@
 const { Schema } = require("mongoose")
 const emailVal = require("email-validator")
+const uniqueVal = require("mongoose-unique-validator")
 
 const user = new Schema({
     name: {
@@ -29,5 +30,7 @@ const user = new Schema({
         default: "Male"
     }
 }, { timestamps: true, autoIndex: false })
+
+user.plugin(uniqueVal)
 
 module.exports = user

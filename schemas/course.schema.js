@@ -2,6 +2,7 @@ const { Schema } = require('mongoose')
 const teeSchema = require('./tee.schema')
 const db = require('../db')
 const TeeModel = db.model('Tee', teeSchema)
+const uniqueVal = require('mongoose-unique-validator')
 
 const makeTee = (rawTees) => {
     const teeArray = []
@@ -26,6 +27,7 @@ const course = new Schema({
     },
     address: {
         type: String,
+        unique: true
     },
     tees: {
         type: [teeSchema],
@@ -35,5 +37,7 @@ const course = new Schema({
     },
     { timestamps: true, autoIndex: false }
 )
+
+course.plugin(uniqueVal)
 
 module.exports = course
