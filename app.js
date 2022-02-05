@@ -9,16 +9,12 @@ var logger = require('morgan')
 const userController = require('./controllers/user.controller')
 const auth = require('./middleware/auth')
 
-const indexRouter = require('./routes/index')
+const indexRouter = require('./routes/index.route')
 const usersRouter = require('./routes/users.route')
 const coursesRouter = require('./routes/courses.route')
 const scoresRouter = require('./routes/scores.route')
 
 var app = express()
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'jade')
 
 app.use(logger('dev'))
 app.use(express.json())
