@@ -28,6 +28,6 @@ const user = new Schema({
         enum: ["Male", "Female"],
         default: "Male"
     }
-})
+}, { timestamps: true, autoIndex: false })
 
 module.exports = user

@@ -31,7 +31,9 @@ const course = new Schema({
         type: [teeSchema],
         required: true,
         set: makeTee,
-    }
-})
+    },
+    },
+    { timestamps: true, autoIndex: false }
+)
 
 module.exports = course

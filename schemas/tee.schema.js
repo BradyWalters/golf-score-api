@@ -20,6 +20,6 @@ const tee = new Schema({
         type: Number,
         required: true
     }
-})
+}, { timestamps: true, autoIndex: false })
 
 module.exports = tee

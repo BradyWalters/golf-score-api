@@ -34,6 +34,6 @@ const score = new Schema({
         type: Number,
         min: 18
     }
-})
+}, { timestamps: true, autoIndex: false })
 
 module.exports = score
