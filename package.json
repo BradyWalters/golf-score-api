@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node server.js",
+    "start": "node index.js",
     "run": "DEBUG=golf-api:* npm start",
     "test": "jest"
   },
