@@ -34,7 +34,10 @@ const addUser = async (req, res) => {
                             return res.status(400).send()
                         }
 
-                        res.status(201).json({ data: newUser, token: token })
+                        const doc = newUser.toJSON()
+                        delete doc.password
+
+                        res.status(201).json({ data: doc, token: token })
                     })
                 }
             })
@@ -47,6 +50,7 @@ const addUser = async (req, res) => {
 
 const login = async (req, res) => {
     if (!req.body.email || !req.body.password) {
+        console.log(req)
         return res.status(400).send()
     }
 
@@ -59,16 +63,17 @@ const login = async (req, res) => {
                     console.error(err)
                 } else {
                     if (result) {
-                        delete user.password
-                        const token = auth.genToken(user._id)
-                        res.status(202).json({ data: user, token: token })
+                        const doc = user.toJSON()
+                        delete doc.password
+                        const token = auth.genToken({ id: user._id })
+                        res.status(202).json({ data: doc, token: token })
                     } else {
                         res.status(401).end()
                     }
                 }
             })
         }
-    })
+    }).clone()
 }
 
 exports.addUser = addUser
