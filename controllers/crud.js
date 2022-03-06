@@ -1,13 +1,12 @@
-const { reset } = require("nodemon")
 
 const getAll = model => async (req, res) => {
-    await model.find(req.query, (err, result) => {
+    await model.find({created_by: req.user._id, ...req.query}, (err, result) => {
         res.status(200).json({ data: result })
     }).clone()
 }
 
 const getOne = model => async (req, res) => {
-    await model.findOne({ _id: req.params.id }, (err, result) => {
+    await model.findOne({created_by: req.user._id, _id: req.params.id }, (err, result) => {
         if (!result) {
             res.status(404).end()
         } else {
@@ -17,12 +16,12 @@ const getOne = model => async (req, res) => {
 }
 
 const addOne = model => async (req, res) => {
-    const newOne = await model.create(req.body)
+    const newOne = await model.create({created_by: req.user._id, ...req.body})
     res.status(201).json({ data: newOne })
 }
 
 const updateOne = model => async (req, res) => {
-    await model.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true }, (err, result) => {
+    await model.findOneAndUpdate({ created_by: req.user._id, _id: req.params.id }, req.body, { new: true }, (err, result) => {
         if(!result) {
             res.status(400).end()
         } else {
@@ -32,7 +31,7 @@ const updateOne = model => async (req, res) => {
 }
 
 const removeOne = model => async (req, res) => {
-    await model.findOneAndRemove({ _id: req.params.id }, (err, result) => {
+    await model.findOneAndRemove({ created_by: req.user._id, _id: req.params.id }, (err, result) => {
         if (!result) {
             res.status(400).end()
         } else {

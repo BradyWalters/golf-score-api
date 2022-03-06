@@ -1,4 +1,4 @@
-const { Schema } = require('mongoose')
+const { Schema, SchemaTypes } = require('mongoose')
 const teeSchema = require('./tee.schema')
 const db = require('../db')
 const TeeModel = db.model('Tee', teeSchema)
@@ -34,6 +34,10 @@ const course = new Schema({
         required: true,
         set: makeTee,
     },
+    created_by: {
+        type: SchemaTypes.ObjectId,
+        required: true
+    }
     },
     { timestamps: true, autoIndex: false }
 )

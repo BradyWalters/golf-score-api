@@ -6,7 +6,7 @@ const score = new Schema({
         type: Date,
         required: true
     },
-    user: {
+    created_by: {
         type: mongoose.SchemaTypes.ObjectId,
         required: true
     },
@@ -33,7 +33,7 @@ const score = new Schema({
     putts: {
         type: Number,
         min: 18
-    }
+    },
 }, { timestamps: true, autoIndex: false })
 
 module.exports = score
