@@ -29,7 +29,7 @@ const addUser = async (req, res) => {
                     const token = auth.genToken({ id: newUser._id })
 
                     newUser.save((err) => {
-                        if(err) {
+                        if (err) {
                             console.error(err)
                             return res.status(400).send()
                         }
@@ -57,6 +57,8 @@ const login = async (req, res) => {
     await User.findOne({ "email": req.body.email }, (err, user) => {
         if (err) {
             console.error(err)
+        } else if (!user) {
+            res.status(404).end()
         } else {
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if (err) {

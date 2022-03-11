@@ -32,32 +32,6 @@ test('POST new user', async () => {
         })
 })
 
-// test('GET users with no users', async () => {
-//     return await supertest(app).get('/api/users')
-//         .expect("Content-Type", /json/)
-//         .expect(200)
-//         .then((res) => {
-//             if(res.body.data[0]) throw new Error('Returned users when none exist')
-//         })
-// })
-
-
-test('GET users with one user', async () => {
-    return await supertest(app).get('/api/users')
-        .auth(userToken, { type: 'bearer' })
-        .expect("Content-Type", /json/)
-        .expect(200)
-        .then((res) => {
-            if (!res.body.data[0]) throw new Error('Returned no users when one exists')
-        })
-})
-
-test('GET users invalid token', async () => {
-    return await supertest(app).get('/api/users')
-        .auth(';lasdkfjl;aksdjfasdkl;f[pfjawpeofjASPDFjksa', { type: 'bearer' })
-        .expect(403)
-})
-
 test('GET /:id correct ID', async () => {
     return await supertest(app).get(`/api/users/${userId}`)
         .auth(userToken, { type: 'bearer' })
